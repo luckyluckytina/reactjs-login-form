@@ -42,12 +42,12 @@ class Login extends Component {
         //     errors.email = "Please enter a valid email";
         // }
 
-        var Url = "https://lijia.oktapreview.com/api/v1/users?limit=25"  // Get user list
+        var Url = "https://xxx.oktapreview.com/api/v1/users?limit=25"  // Get user list
         const url = 'http://localhost:3000/getuser'
         const Data =
         {
-         username: "lijialiu6@gmail.com",
-         password: "Llj174025174025!)"
+         username: "{{username}}",
+         password: "{{password}}"
         //  options: {
         //     "multiOptionalFactorEnroll": true,
         //     "warnBeforePasswordExpired": true
@@ -57,7 +57,7 @@ class Login extends Component {
             headers:{
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "Authorization": "SSWS 00cqISTbEWSIqVn54uHCtrT6JcsiqXBm8EYVKvZZiw"
+                "Authorization": "SSWS{{apiKey}}"
             },
 
             method: "GET",
