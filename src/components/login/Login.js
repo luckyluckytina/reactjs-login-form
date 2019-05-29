@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Row, Form, FormGroup, FormControl, ControlLabel, Button, HelpBlock } from 'react-bootstrap';
 import './login.sass';
-import { isEmail, isEmpty, isLength, isContainWhiteSpace } from 'shared/validator';
+// import { isEmail, isEmpty, isLength, isContainWhiteSpace } from 'src/components/shared/validator';
+import Request from 'react-http-request';
 
 class Login extends Component {
 
@@ -12,7 +13,8 @@ class Login extends Component {
             formData: {}, // Contains login form data
             errors: {}, // Contains login field errors
             formSubmitted: false, // Indicates submit status of login form 
-            loading: false // Indicates in progress state of login form
+            loading: false, // Indicates in progress state of login form
+            res: {}
         }
     }
 
@@ -34,37 +36,76 @@ class Login extends Component {
         let errors = {};
         const { formData } = this.state;
 
-        if (isEmpty(formData.email)) {
-            errors.email = "Email can't be blank";
-        } else if (!isEmail(formData.email)) {
-            errors.email = "Please enter a valid email";
+        // if (isEmpty(formData.email)) {
+        //     errors.email = "Email can't be blank";
+        // } else if (!isEmail(formData.email)) {
+        //     errors.email = "Please enter a valid email";
+        // }
+
+        var Url = "https://lijia.oktapreview.com/api/v1/users?limit=25"  // Get user list
+        const url = 'http://localhost:3000/getuser'
+        const Data =
+        {
+         username: "lijialiu6@gmail.com",
+         password: "Llj174025174025!)"
+        //  options: {
+        //     "multiOptionalFactorEnroll": true,
+        //     "warnBeforePasswordExpired": true
+        //     }  
+        }
+        const otherPram = {
+            headers:{
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": "SSWS 00cqISTbEWSIqVn54uHCtrT6JcsiqXBm8EYVKvZZiw"
+            },
+
+            method: "GET",
+            mode: "no-cors"
         }
 
-        if (isEmpty(formData.password)) {
-            errors.password = "Password can't be blank";
-        }  else if (isContainWhiteSpace(formData.password)) {
-            errors.password = "Password should not contain white spaces";
-        } else if (!isLength(formData.password, { gte: 6, lte: 16, trim: true })) {
-            errors.password = "Password's length must between 6 to 16";
-        }
+        if(formData.email == "lijialiu6@gmail.com" && formData.password == "123") {
+            fetch(url)
+            .then(res=>res.json())
+            .then(
+                result => {this.setState(
+                {res: result.body}
+            )}
+            )
+            .catch(error=> console.log(error))
 
-        if (isEmpty(errors)) {
             return true;
-        } else {
+            
+        }else {
             return errors;
-        }    
+        }
+
+        // if (isEmpty(formData.password)) {
+        //     errors.password = "Password can't be blank";
+        // }  else if (isContainWhiteSpace(formData.password)) {
+        //     errors.password = "Password should not contain white spaces";
+        // } else if (!isLength(formData.password, { gte: 6, lte: 16, trim: true })) {
+        //     errors.password = "Password's length must between 6 to 16";
+        // }
+
+        // if (isEmpty(errors)) {
+        //     return true;
+        // } else {
+        //     return errors;
+        // }    
     }
 
     login = (e) => {
-        
+        console.log(e);
         e.preventDefault();
 
         let errors = this.validateLoginForm();
 
         if(errors === true){
             alert("You are successfully signed in...");
-            window.location.reload()   
+            // window.location.reload()   
         } else {
+            alert("Username or password is not correct...");
             this.setState({
                 errors: errors,
                 formSubmitted: true
